@@ -15,12 +15,12 @@ Each number represents a position to a configuration fragment with one or more l
 The default values for block range are distributed as follows.
 
 
-    **0       :** Reserved by default to main class parameters;
+    0         : Reserved by default to main class parameters;
     1   -> 99 : You can freely use to insert extra configuration in main session;
-    **100 -> 199:** Reserved to ACL definition list;
+    100 -> 199: Reserved to ACL definition list;
     200 -> 299: You can freely use to insert extra configuration;
-    **300 -> 399:** Reserved to HTTP_ACCESS rules;
-    **400       :** Refresh pattern list;
+    300 -> 399: Reserved to HTTP_ACCESS rules;
+    400       : Refresh pattern list;
     401 -> N  : Put everithing you need;
 
 
@@ -60,56 +60,56 @@ If you need to extend the main block, you can assign custom fragments to complem
 app_name
 This parameter is assigned by default considering $::osfamily fact. It expands to *squid* or *squid3*, depending of the operational system and it's used to define other strings along configuration. Otherwise, you can explicit assign a value here to solve a requirement of your system.
 
-**http_port**
-Port where squid will bind client requests.
+**http_port**  
+Port where squid will bind client requests.  
 Default = '3128'.
 
-**cache_path**
-Full path to the file where squid will store cache objects.
+**cache_path**  
+Full path to the file where squid will store cache objects.  
 Default = "/var/spool/${app_name}"
 
-**cache_size_mb**
-Size of the object cache in Mbytes.
+**cache_size_mb**  
+Size of the object cache in Mbytes.  
 Default = 128.
 
-**cache_l1**
-Number of subdirectories in the first level of disk cache.
+**cache_l1**  
+Number of subdirectories in the first level of disk cache.  
 Default = 16.
 
-**cache_l2**
-Number of subdirectories below each level one subdirectory.
+**cache_l2**  
+Number of subdirectories below each level one subdirectory.  
 Default = 256.
 
-**coredump_dir**
-Directory where squid will leave core dumps.
+**coredump_dir**  
+Directory where squid will leave core dumps.  
 Default = $cache_path
 
-**max_obj_size_in_memory**
-Objects greater than this, won't be cached in memory. The format is a number followed by storage unit (KB, MB, GB, etc).
+**max_obj_size_in_memory**  
+Objects greater than this, won't be cached in memory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '64 KB'
 
-**max_obj_size**
-Limits the maximum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).
+**max_obj_size**  
+Limits the maximum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '32 MB'
 
-**min_obj_size**
-Limits the minimum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).
+**min_obj_size**  
+Limits the minimum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '0 KB'
 
-**cache_swap_low**
-Percentage which squid will start to purge old objects from cache.
+**cache_swap_low**  
+Percentage which squid will start to purge old objects from cache.  
 Default = '90'
 
-**cache_swap_high**
-In this watermark, old objects will be purged more aggressively, till the proxy reaches below cache_swap_low watermark.
+**cache_swap_high**  
+In this watermark, old objects will be purged more aggressively, till the proxy reaches below cache_swap_low watermark.  
 Default = '95'.
 
-**cache_access_log**
-File where accesses will be logged.
+**cache_access_log**  
+File where accesses will be logged.  
 Default = "/var/log/${app_name}/access_log".
 
-**cache_mem**
-Maximum size for the memory cache. The format is a number followed by storage unit (KB, MB, GB, etc). Remember this cache is formed by four-kylobytes pages.
+**cache_mem**  
+Maximum size for the memory cache. The format is a number followed by storage unit (KB, MB, GB, etc). Remember this cache is formed by four-kylobytes pages.  
 Default = '32 MB'.
 
 
@@ -124,36 +124,36 @@ The define `easysquid::acl` will block any ACL order defined out of the ranges f
 
 Each ACL must have the following structure:
 
-**acl_name**
-Name of the acl. Use only alphabetic, followed by alphanumeric and underscores only. For exemplo 'internal_lan', 'vlan_001', etc.
+**acl_name**  
+Name of the acl. Use only alphabetic, followed by alphanumeric and underscores only. For exemplo 'internal_lan', 'vlan_001', etc.  
 Default = Must be supplied.
 
-**acl_type**
-Type of ACL. Squid has a lot - 'src', 'dst', 'localip', 'dstdomain', 'url_regex', etc.
+**acl_type**  
+Type of ACL. Squid has a lot - 'src', 'dst', 'localip', 'dstdomain', 'url_regex', etc.  
 Default = Must be supplied.
 
-**ensure**
-It can be set as 'argument' or 'file'. If you want to put ACL arguments directly in the ACL command, it will be 'argument'; If you want to reference an external include file with a list of arguments, ensure will be 'file'.
+**ensure**  
+It can be set as 'argument' or 'file'. If you want to put ACL arguments directly in the ACL command, it will be 'argument'; If you want to reference an external include file with a list of arguments, ensure will be 'file'.  
 If you specified 'file', you must pass path in the `$acl_args` parameter and the content in `$content`. In this case, the file will be created and managed by puppet.
 
-**content**
-If you assigned ensure as file, it will be the file content and the define will raise an error if you didn't give it.
+**content**  
+If you assigned ensure as file, it will be the file content and the define will raise an error if you didn't give it.  
 Default  = undef.
 
-**acl_action**
-Simply 'allow' or 'deny'.
+**acl_action**  
+Simply 'allow' or 'deny'.  
 Default = 'allow'
 
-**acl_order**
-Order that ACL and HTTP\_ACCESS will be rendered in its configuration blocks. For instance, considering acl block ranges from 100 to 199 and http_access ranges from 300 to 399, if you set order as 103 , http\_access will automatically be assigned as 303.
-You can use relative positioning to `$acl_min_range`. For example, setting acl\_order like `($easysqui::acl_min_range + 3)` takes the same effect above and http\_access order will turn ($easysquid::httpaccess\_min_range + 3).
+**acl_order**  
+Order that ACL and HTTP\_ACCESS will be rendered in its configuration blocks. For instance, considering acl block ranges from 100 to 199 and http_access ranges from 300 to 399, if you set order as 103 , http\_access will automatically be assigned as 303.  
+You can use relative positioning to `$acl_min_range`. For example, setting acl\_order like `($easysqui::acl_min_range + 3)` takes the same effect above and http\_access order will turn ($easysquid::httpaccess\_min_range + 3).  
 Default = ($easysquid::acl\_min\_range + 1),
 
 
 
 ### HTTP_ACCESS Block
 
-In this configuration block the http\_access rules will be rendered. You cannot define http\_access without acl definition. In fact, it will be created at the same time by `easysquid::acl` in the a relative order based on ACL position.
+In this configuration block the http\_access rules will be rendered. You cannot define http\_access without acl definition. In fact, it will be created at the same time by `easysquid::acl` in the a relative order based on ACL position.  
 The last rule will always be `http_access deny all` (automatically).
 
 
@@ -161,7 +161,7 @@ The last rule will always be `http_access deny all` (automatically).
 ### Refresh Pattern Block
 The refresh\_pattern clause defines regular expressions to map specific request patterns and how long they will be considered fresh in the cash. All the refersh patern configuration can be assigned as a single array of hashes in the `easysquid::refresh_pattern` class parameter. Usually, it's not necessary to change defaults, but if you need, you can reassign the hash using the following structure:
 
-```json
+```puppet
 # The example below is the default value
 [
   {
@@ -194,19 +194,19 @@ The refresh\_pattern clause defines regular expressions to map specific request 
 
 Where:
 
-**re_proto**
+**re_proto**  
 A regular expression to map request pattern
 
-**obj_age**
+**obj_age**  
 It's the time (in minutes) an object without an explicit expiry time should be considered fresh.
 
-**pct_age**
+**pct_age**  
 It's the percentage of the objects age (time since last modification age) an object without explicit expiry time will be considered fresh.
 
-**max_age**
+**max_age**  
 This is an upper limit on how long objects without an explicit expiry time will be considered fresh
 
-**opt**
+**opt**  
 Optional arguments to supplement refresh patterns. For example, override-expire, override-lastmod, reload-into-ims, ignore-reload, ignore-no-store, etc. See squid documentation.
 
 
@@ -352,156 +352,156 @@ To achieve this task, you can define custom variables inside your own ERB templa
 
 ## Parameter documentation
 
-**custom_config**
-Used only if you want to use a custom template. If it's different from undef, will cause easysquid to ignore class fragments and apply only the custom template received as value in the parameter.
+**custom_config**  
+Used only if you want to use a custom template. If it's different from undef, will cause easysquid to ignore class fragments and apply only the custom template received as value in the parameter.  
 Default = undef.
 
-**app_name**
-Name of application used to compose other string parameters.
+**app_name**  
+Name of application used to compose other string parameters.  
 Default = Depends on the fact $::osfamily.
 
-**package_name**
-Name of the squid package.
+**package_name**  
+Name of the squid package.  
 Default = $app_name.
 
-**service_name**
-Name of the squid service.
+**service_name**  
+Name of the squid service.  
 Default = $app_name.
 
-**config_path**
-Full path to configuration directory.
+**config_path**  
+Full path to configuration directory.  
 Default = /etc/${app_name}
 
-**config_file_name**
-Name of the main configuration file.
+**config_file_name**  
+Name of the main configuration file.  
 Default = ${app_name}.conf
 
-**cache_path**
-Full path to the disk cache.
+**cache_path**  
+Full path to the disk cache.  
 Default = /var/spool/${app_name}
 
-**cache_mgr**
-Array with the cache manager hosts. Specify a host per item. If you keep it `undef`, will render only `localhost` entry in the file cachemgr.conf.
+**cache_mgr**  
+Array with the cache manager hosts. Specify a host per item. If you keep it `undef`, will render only `localhost` entry in the file cachemgr.conf.  
 Default = undef.
 
-**acls**
-A hash with the ACL list necessary to build ACL Block and HTTP_ACCESS Block. It's not mandatory and you can keep it undef and declare each ACL with `easysquid::acl` if you prefer. The `acls` hash can be used when you want to lookup ACLs from hiera database.
+**acls**  
+A hash with the ACL list necessary to build ACL Block and HTTP_ACCESS Block. It's not mandatory and you can keep it undef and declare each ACL with `easysquid::acl` if you prefer. The `acls` hash can be used when you want to lookup ACLs from hiera database.  
 Defautl = undef.
 
-**http_port**
-Default HTTP client port.
+**http_port**  
+Default HTTP client port.  
 Default = 3128
-      
-**cache_size_mb**
-Size im Mbytes of the disk cache.
+    
+**cache_size_mb**  
+Size im Mbytes of the disk cache.  
 Default = 128.
 
-**cache_l1**
-Number of directories in the first level of disk cache.
+**cache_l1**  
+Number of directories in the first level of disk cache.  
 Default = 16.
 
-**cache_l2**
-Number of directories in the second level of disk cache.
+**cache_l2**  
+Number of directories in the second level of disk cache.  
 Default = 256
 
-**coredump_dir**
-Directory where squid will put core dump files.
+**coredump_dir**  
+Directory where squid will put core dump files.  
 Default = $cache_path.
 
-**user**
-User owner of squid instalation.
+**user**  
+User owner of squid instalation.  
 Default = root.
 
-**group**
-Group owner of squid instalation.
+**group**  
+Group owner of squid instalation.  
 Default = squid.
 
-**groupid**
-If you changed default group, it's advisable you use same group ID in each cache node.
+**groupid**  
+If you changed default group, it's advisable you use same group ID in each cache node.  
 Default = undef.
 
-**tpl_main**
-Template used for main block.
+**tpl_main**  
+Template used for main block.  
 Default = easysquid/tpl_main.erb
 
-**tpl_acls**
-Template to mark acl block. The default template configure localhost ACL automatically.
+**tpl_acls**  
+Template to mark acl block. The default template configure localhost ACL automatically.  
 Default = easysquid/tpl_acls.erb.
 
-**tpl_httpaccess**
-Template used for http_access block. It allows localhost ACL by default.
+**tpl_httpaccess**  
+Template used for http_access block. It allows localhost ACL by default.  
 Default = easysquid/tpl_httpaccess.erb.
 
-**tpl_refpattern**
-Template used for refresh pattern block.
+**tpl_refpattern**  
+Template used for refresh pattern block.  
 Default = easysquid/tpl_refpattern.erb.
 
-**tpl_error_page**
-Template used for CSS error page (errorpage.css).
+**tpl_error_page**  
+Template used for CSS error page (errorpage.css).  
 Default = puppet:///modules/easysquid/errorpage.css
 
 **tpl_mime_page**
 Template for mime page (mime.conf).
 Default = puppet:///modules/easysquid/mime.conf
 
-**tpl_cachemgr**
-Template for cache manager file (cachemgr.conf).
+**tpl_cachemgr**  
+Template for cache manager file (cachemgr.conf).  
 Default = easysquid/tpl_cachemgr.erb
 
-**main_min_range**
-Initial position for lines in the main block. It's where the first fragment of configuration will be allocated.
+**main_min_range**  
+Initial position for lines in the main block. It's where the first fragment of configuration will be allocated.  
 Default = 0
 
-**main_max_range**
-The last position for inserting fragements in the main block.
+**main_max_range**  
+The last position for inserting fragements in the main block.  
 Default = 99.
 
-**acl_min_range**
-Intial position for ACL configuration fragments.
+**acl_min_range**  
+Intial position for ACL configuration fragments.  
 Default = 100.
 
-**acl_max_range**
-Final allowed podition to insert ACL fragments.
+**acl_max_range**  
+Final allowed podition to insert ACL fragments.  
 Default = 199.
 
-**httpaccess_min_range**
-Initial allowed podition to insert http_accesses fragments.
+**httpaccess_min_range**  
+Initial allowed podition to insert http_accesses fragments.  
 Default = 300.
 
-**httpaccess_max_range**
-Final allowed podition to insert http_accesses fragments.
+**httpaccess_max_range**  
+Final allowed podition to insert http_accesses fragments.  
 Default = 399.
 
-**max_obj_size_in_memory**
-Objects greater than this, won't be cached in memory. The format is a number followed by storage unit (KB, MB, GB, etc).
+**max_obj_size_in_memory**  
+Objects greater than this, won't be cached in memory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '64 KB'
 
-**max_obj_size**
-Limits the maximum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).
+**max_obj_size**  
+Limits the maximum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '32 MB'.
-         
-**min_obj_size**
-Limits the minimum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).
+       
+**min_obj_size**  
+Limits the minimum size of an object in any cache directory. The format is a number followed by storage unit (KB, MB, GB, etc).  
 Default = '0 KB'
 
-**cache_swap_low**
-Percentage which squid will start to purge old objects from cache.
+**cache_swap_low**  
+Percentage which squid will start to purge old objects from cache.  
 Default = '90'
 
-**cache_swap_high**
-In this watermark, old objects will be purged more aggressively, till the proxy reaches below cache_swap_low watermark.
+**cache_swap_high**  
+In this watermark, old objects will be purged more aggressively, till the proxy reaches below cache_swap_low watermark.  
 Default = '95'.
 
-**cache_access_log**
-File where accesses will be logged.
+**cache_access_log**  
+File where accesses will be logged.  
 Default = "/var/log/${app_name}/access_log".
 
-**cache_mem**
-Maximum size for the memory cache. The format is a number followed by storage unit (KB, MB, GB, etc). Remember this cache is formed by four-kylobytes pages.
+**cache_mem**  
+Maximum size for the memory cache. The format is a number followed by storage unit (KB, MB, GB, etc). Remember this cache is formed by four-kylobytes pages.  
 Default = '32 MB'.
 
-**refresh_pattern**
-An array of hashes with the object refresh pattern. It will be iterated inside tpl_refpattern.erb. See "Refresh Pattern Block" item above.
+**refresh_pattern**  
+An array of hashes with the object refresh pattern. It will be iterated inside tpl_refpattern.erb. See "Refresh Pattern Block" item above.  
 Default = 
 ```puppet
 [
