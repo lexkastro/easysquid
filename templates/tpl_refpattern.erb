@@ -1,0 +1,11 @@
+
+# ################################ #
+#         REFRESH PATTERN          #
+# ################################ #
+
+<%- if @refresh_pattern  -%>
+<%-   @refresh_pattern.each do |ref| -%>
+<%- linha = sprintf("refresh_pattern %-25s %-6s %-8s %-8s %-s", ref['re_proto'], ref['obj_age'], ref['pct_age'], ref['max_age'], ref['opt']) -%>
+<%= linha %>
+<%- end -%>
+<%- end -%>

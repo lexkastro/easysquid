@@ -1,0 +1,46 @@
+# This is an example config file to test 
+# easysquid custom configuration.
+# The configuration below keep track on main
+# parameters and uses fixed acl and access
+# lists.
+
+# ################################ #
+#        MAIN PARAMETERS           #
+# ################################ #
+http_port                       <%= @http_port %>
+cache_dir ufs                   <%= @cache_path %> <%= @cache_size_mb %> <%= @cache_l1 %> <%= @cache_l2 %>
+coredump_dir                    <%= @coredump_dir %>
+maximum_object_size_in_memory   <%= @max_obj_size_in_memory %>
+maximum_object_size             <%= @max_obj_size %>
+minimum_object_size             <%= @min_obj_size %>
+cache_swap_low                  <%= @cache_swap_low %>
+cache_swap_high                 <%= @cache_swap_high %>
+cache_access_log                <%= @cache_access_log %>
+cache_mem                       <%= @cache_mem %>
+
+
+# ################################ #
+#            ACL LIST              #
+# ################################ #
+
+acl localhost src 127.0.0.1/32
+acl intranet src 10.0.0.0/24
+
+# ################################ #
+#        HTTP ACCESS RULES         #
+# ################################ #
+
+http_access allow localhost
+http_access allow intranet
+
+http_access deny all
+
+# ################################ #
+#         REFRESH PATTERN          #
+# ################################ #
+
+refresh_pattern ^ftp:                     1440   20       10080
+refresh_pattern ^gopher:                  1440   0        1440
+refresh_pattern -i (/cgi-bin/|\?)         0      0        0
+refresh_pattern .                         0      20       4320
+

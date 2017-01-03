@@ -1,0 +1,8 @@
+name         'lexkastro/easysquid'
+version      '0.1.0'
+source       'https://github.com/lexkastro/easysquid'
+author       'Alex De Castro'
+license      'MIT License'
+summary      'Installs and congfigures squid proxy in an easy way.'
+project_page 'https://forge.puppetlabs.com/lexkastro/easysquid'
+dependency   'puppetlabs/concat', '>= 2.0.0'
