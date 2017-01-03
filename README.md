@@ -539,11 +539,11 @@ Default =
 MIT License
 
 
-Contact
--------
+## Contact
+
+Alex De Castro (lexkastro@gmail.com)
 
 
-Support
--------
+## Support
 
-Please log tickets and issues at our [Projects site](http://projects.example.com)
+Please log tickets and issues at our [Projects site](http://https://github.com/lexkastro/easysquid/issues)
