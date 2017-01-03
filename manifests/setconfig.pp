@@ -33,7 +33,7 @@
 # Copyright
 # ---------
 #
-# Copyright (C) 2016 Alex De Castro.
+# Copyright (C) 2017 Alex De Castro.
 #
 define easysquid::setconfig (
   $code,

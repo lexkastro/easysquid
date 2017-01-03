@@ -133,7 +133,7 @@
 # Copyright
 # ---------
 #
-# Copyright (c) 2016 Alex De Castro.
+# Copyright (c) 2017 Alex De Castro.
 #
 define easysquid::acl (
   $acl_name,

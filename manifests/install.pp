@@ -23,7 +23,7 @@
 # Copyright
 # ---------
 #
-# Copyright (C) 2016 Alex De Castro.
+# Copyright (C) 2017 Alex De Castro.
 #
 class easysquid::install {
   $package_name = $easysquid::package_name

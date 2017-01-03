@@ -132,7 +132,7 @@
 #
 # === Copyright
 #
-# Copyright 2016 Alex De Castro.
+# Copyright 2017 Alex De Castro.
 #
 class easysquid::fragments {
 
