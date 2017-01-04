@@ -232,8 +232,16 @@ class easysquid::params {
 
 
   case $::osfamily  {
-    'RedHat': { $app_name = 'squid' }
-    'Debian': { $app_name = 'squid3' }
+    'RedHat': {
+      $app_name = 'squid'
+      $user     = 'squid'
+      $group    = 'squid'
+    }
+    'Debian': {
+      $app_name = 'squid3'
+      $user     = 'proxy'
+      $group    = 'proxy'
+    }
     default : { fail ('Unsupported SO') }
   }
 
@@ -243,7 +251,7 @@ class easysquid::params {
   $cache_path                    = "/var/spool/${app_name}"
   $config_path                   = "/etc/${app_name}"
   $log_path                      = "/var/log/${app_name}"
-  $config_file_name              = "${app_name}.conf"
+  $config_file_name              = 'squid.conf'
   $cache_mgr                     = undef
   $acls                          = undef
   $http_port                     = '3128'
@@ -258,9 +266,8 @@ class easysquid::params {
   $cache_swap_high               = '95'
   $cache_access_log              = "${log_path}/access.log"
   $coredump_dir                  = $cache_path
-  $user                          = 'root'
-  $group                         = 'squid'
   $groupid                       = undef
+  $userid                        = undef
   $tpl_main                      = 'easysquid/tpl_main.erb'
   $tpl_acls                      = 'easysquid/tpl_acls.erb'
   $tpl_httpaccess                = 'easysquid/tpl_httpaccess.erb'

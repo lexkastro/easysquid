@@ -14,7 +14,7 @@ class acl_render {
     acl_type => 'src',
     acl_args => '10.0.0.0/24',
   }
- 
+
   easysquid::acl {'IP Exclusivo':
     acl_name => 'ip_exclusivo',
     acl_type => 'dst',
@@ -22,10 +22,10 @@ class acl_render {
   }
 
   easysquid::acl {'Domains whitelist':
-    acl_name => 'whitelist',
+    ensure   => 'file',
     acl_type => 'dstdomain',
     acl_args => '/etc/squid/whitelist.conf',
-    ensure   => 'file', 
+    acl_name => 'whitelist',
     content  => $content,
   }
 }

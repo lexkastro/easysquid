@@ -36,6 +36,7 @@ class easysquid (
   $cache_l2               = $easysquid::params::cache_l2,
   $coredump_dir           = $easysquid::params::coredump_dir,
   $user                   = $easysquid::params::user,
+  $userid                 = $easysquid::params::userid,
   $group                  = $easysquid::params::group,
   $groupid                = $easysquid::params::groupid,
   $tpl_main               = $easysquid::params::tpl_main,

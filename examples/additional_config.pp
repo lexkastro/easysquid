@@ -26,7 +26,7 @@ auth_param digest nonce_max_duration 600 minutes
 auth_param digest nonce_strictness off
 auth_param digest check_nonce_count off
 auth_param digest post_workaround on
-" 
+"
 
   $acls = {
     'Intranet definition' => {
@@ -53,17 +53,17 @@ auth_param digest post_workaround on
   }
 
   class {'easysquid':
-    acls                   => $acls,
-    main_min_range         => $main_min_range,
-    main_max_range         => $main_max_range,
-    acl_min_range          => $acl_min_range,
-    acl_max_range          => $acl_max_range,
-    httpaccess_min_range   => $httpaccess_min_range,
-    httpaccess_max_range   => $httpaccess_max_range,
-  } -> 
+    acls                 => $acls,
+    main_min_range       => $main_min_range,
+    main_max_range       => $main_max_range,
+    acl_min_range        => $acl_min_range,
+    acl_max_range        => $acl_max_range,
+    httpaccess_min_range => $httpaccess_min_range,
+    httpaccess_max_range => $httpaccess_max_range,
+  } ->
 
   easysquid::setconfig {'authentication block':
-    code => $authentication,
+    code  => $authentication,
     order => ($::easysquid::main_max_range + 1),
   }
 }

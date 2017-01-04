@@ -50,12 +50,12 @@ define easysquid::setconfig (
 
   $comment              = $title
   $main_config_file     = "${easysquid::config_path}/${easysquid::config_file_name}"
-  
-    # Block config along used ranges
+
+  # Block config along used ranges
   if($order == $main_min_range) {
     fail ("You cannot allocate \"${title}\" in main_min_range. It's reserved for main block.")
   }
-  
+
   if((!($order >  $main_min_range)       and !($order <= $main_max_range)) or
     (  ($order >= $acl_min_range)        and  ($order <= $acl_max_range))  or
     (  ($order >= $httpaccess_min_range) and  ($order <= $httpaccess_max_range))) {

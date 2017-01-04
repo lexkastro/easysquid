@@ -66,12 +66,13 @@ class easysquid::config {
   $config_path          = $easysquid::config_path
   $config_file_name     = $easysquid::config_file_name
   $user                 = $easysquid::user
+  $userid               = $easysquid::userid
   $group                = $easysquid::group
   $groupid              = $easysquid::groupid
   $custom_config        = $easysquid::custom_config
   $tpl_cachemgr         = $easysquid::tpl_cachemgr
   $tpl_mime_page        = $easysquid::tpl_mime_page
-  $tpl_error_page       = easysquid::tpl_error_page
+  $tpl_error_page       = $easysquid::tpl_error_page
 
   $main_config = "${config_path}/${config_file_name}"
 
@@ -89,6 +90,24 @@ class easysquid::config {
       require => Class['easysquid::install'],
     }
   }
+
+  # If you do not use the default user, we'll create it.
+  if ($userid) {
+    user {$user:
+      ensure  => present,
+      gid     => $group,
+      uid     => $userid,
+      require => Group[$group],
+    }
+  }
+  else {
+    user {$user:
+      ensure  => present,
+      gid     => $group,
+      require => Group[$group],
+    }
+  }
+
 
   if ($custom_config) {
     # Configuration directory
