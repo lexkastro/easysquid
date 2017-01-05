@@ -64,6 +64,6 @@ auth_param digest post_workaround on
 
   easysquid::setconfig {'authentication block':
     code  => $authentication,
-    order => ($::easysquid::main_max_range + 1),
+    order => ($::easysquid::main_min_range + 1),
   }
 }

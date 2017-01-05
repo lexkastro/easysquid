@@ -144,6 +144,7 @@ define easysquid::acl (
   $acl_action   = 'allow',
   $acl_order    = ($easysquid::acl_min_range + 1),
 ){
+  require easysquid
 
   $comment              = $title
   $config_path          = $easysquid::config_path

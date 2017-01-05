@@ -1,13 +1,34 @@
 # lexkastro/easysquid
 
-Easysquid installs and configures squid in an easy way. In fact, it will permit you to create a proxy server exposing the most important parameters only. If you need more specifc configuration, it's possible to insert extra code fragments to supply them. The main idea is to be simple and flexible.
+Easysquid installs and configures squid in an easy way. In fact, it will permit you to create a proxy server exposing only the most important parameters. If you need more specifc configuration, it's possible to insert extra code fragments to supply them. The main idea is to be simple and flexible.
+
+
+## Summary
+
++ [Structure](#structure)
++ [Block Ranges](#block-ranges)
+    + [Main Block](#main-block)
+    + [ACL Block](#acl-block)
+    + [HTTP_Access Block](#http_access-block)
+    + [Refresh Pattern Block](#refresh-pattern-block)
++ [Usage](#usage)
+    + [Specifying ACL's Manually](#specifying-acls-manually)
+    + [Specifying ACLS as a hash](#specifying-acls-as-a-hash)
+    + [Input extra configuration](#input-extra-configuration)
+    + [Defining all configuration in a custom squid.conf file](#defining-all-configuration-in-a-custom-squidconf-file)
+    + [Proxy Authentication](#proxy-authentication)
++ [Parameter documentation](#parameter-documentation)
++ [License](#license)
++ [Contact](#contact)
++ [Support](#support)
+
 
 
 ## Structure
 
 Easysquid has fixed configuration blocks in its structure. It grants some plainness over deployments. Each configuration block has a pair of indexes to bound beggining and ending. It's because we use `concat::fragments` to build main configuration file. With this approach, we can limit borders of the fixed blocks and insert extra custom configuration, if necessary, before, between or after one of those blocks.
 
-Each number represents a position to a configuration fragment with one or more lines. It's important to put ACLs or extra code in the right position to avoid misconfig
+Each number represents a position to a configuration fragment with one or more lines. It's important to put ACLs or extra code in the right position to avoid misconfiguration errors.
 
 
 ### Block ranges
@@ -306,7 +327,7 @@ You can instance easysquid and declare a hash with the ACLs. The define `easysqu
 As we said before, if you need to insert some extra configuration between fixed block range after deploy easysquid, use the define `easysquid::setconfig`.
 
 ```puppet
-  easysquid::setconfig {'authentication block':
+  easysquid::setconfig {'extra parameters':
     code => $extra_configuration,
     order => ($::easysquid::main_max_range + 1),
   }
@@ -348,6 +369,86 @@ To achieve this task, you can define custom variables inside your own ERB templa
     }
   }
 ```
+
+### Proxy Authentication
+
+Proxy authentication is threated as extra configuration. Authentication clauses in squid usually demand more complex and custom configuration. Considering this feature is achieved by plugins in squid library dir and it differs a lot according to the operational system and version, it could raise complexity and parameter number in this module. So, in this first version, we decided to offer an easy way to put extra code in the configuration file and satisfy any kind of authentication plugin. I will include defines to create plain, ldap, ldap+digest and kerberos authentication fragments in the next versions. But, by now, we can use the define `easysquid::setconfig`.
+
+For example, to insert ldap+digest fragment after main parameters, you can create a wrapper class or profile like this:
+
+
+```puppet
+#
+# Profile: profiles::squid_cache
+# ==============================
+#
+class profiles::squid_cache {
+
+  # Authentication Block
+  # You must define squid_auth plugin according to
+  # operational systems and squid version.
+  # Usualy, the auth programs are in squid lib dir.
+  # This example runs in RedHat (6.5 and 7.0) and
+  # Debian (7.5).
+  case $osfamily {
+    'RedHat': {
+      $program =  $operatingsystemrelease ? {
+        '6.5'   => '/usr/lib64/squid/squid_ldap_auth',
+        '7.0'   => '/usr/lib64/squid/digest_ldap_auth',
+        default => fail ('Unsuported OS Version')
+      }
+    }
+
+    'Debian': {
+      $program =  $operatingsystemrelease ? {
+        '7.5'   => '/usr/lib/squid3/digest_ldap_auth',
+        default => fail ('Unsuported OS Version')
+      }
+    }
+
+    default: { fail ('Unsuported OS') }
+  }
+
+  # LDAP user DN
+  $ldap_user       = 'uid=radius,ou=Users,ou=Global,dc=com,dc=br'
+
+  # Password
+  $ldap_pass       = 'P@ssFrase'
+
+  # LDAP server
+  $ldap_server     = 'auth.mycompany.com.br'
+
+  # Auth Clauses
+  $authentication  = "auth_param digest program ${program} -v 3 -b \"ou=MYCOMPANY,dc=com,dc=br\" -D \"${ldap_user}\" -w ${ldap_pass} -F \"uid=%s\" -e -A labeledURI  ${ldap_server}
+auth_param digest realm Type login and password
+auth_param digest children 50 startup=0 idle=1
+auth_param digest nonce_max_duration 600 minutes
+auth_param digest nonce_strictness off
+auth_param digest check_nonce_count off
+auth_param digest post_workaround on
+"
+
+  # Instance easysquid
+  class {'easysquid':} ->
+
+  # Add authentication clauses
+  easysquid::setconfig {'authentication block':
+    code => $authentication,
+    order => ($::easysquid::main_min_range + 1),
+  } ->
+
+  
+  # Add authentication ACL and http_access
+  easysquid::acl{'LDAP-Digest Auth':
+    acl_name   => 'ldap-auth',
+    acl_type   => 'proxy_auth',
+    acl_args   => 'REQUIRED',
+    acl_action => 'allow',
+    acl_order  => ($easysquid::acl_min_range + 1),
+  }
+}
+
+
 
 
 ## Parameter documentation
