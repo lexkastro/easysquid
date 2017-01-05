@@ -447,8 +447,7 @@ auth_param digest post_workaround on
     acl_order  => ($easysquid::acl_min_range + 1),
   }
 }
-
-
+```
 
 
 ## Parameter documentation
