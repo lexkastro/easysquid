@@ -19,6 +19,7 @@ Easysquid installs and configures squid in an easy way. In fact, it will permit 
     + [Proxy Authentication](#proxy-authentication)
 + [Parameter documentation](#parameter-documentation)
 + [License](#license)
++ [Limitations](#limitations)
 + [Contact](#contact)
 + [Support](#support)
 
@@ -395,7 +396,7 @@ class profiles::squid_cache {
       $program =  $operatingsystemrelease ? {
         '6.5'   => '/usr/lib64/squid/squid_ldap_auth',
         '7.0'   => '/usr/lib64/squid/digest_ldap_auth',
-        default => fail ('Unsuported OS Version')
+        default => undef,
       }
     }
 
@@ -636,7 +637,14 @@ Default =
 
 
 ## License
+
 MIT License
+
+
+## Limitations
+
+Easysquid is in a very fresh version and was tested only in RedHat 6, RedHat 7 and Debian 7. We pretend to homolog more systems. 
+We accept contributions.
 
 
 ## Contact

@@ -4,8 +4,12 @@ require 'spec_helper'
 
 describe 'easysquid::acl' do
 
-  let(:facts) { {:osfamily => 'RedHat'} }
-
+  let(:facts) {
+    {
+      :osfamily => 'RedHat',
+      :operatingsystemmajrelease => '7',
+    }
+  }
   context 'With ensure => argument' do
 
     let(:title) {'Intranet definition'}

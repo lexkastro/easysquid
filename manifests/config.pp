@@ -143,6 +143,8 @@ class easysquid::config {
     # will remain.
     file {$config_path:
       ensure  => directory,
+      owner   => $user,
+      group   => $group,
       purge   => true,
       recurse => true,
       require => Class['easysquid::install'],

@@ -4,8 +4,12 @@ require 'spec_helper'
 
 describe 'easysquid::setconfig' do
 
-  let(:facts) { {:osfamily => 'RedHat'} }
-
+  let(:facts) {
+    {
+      :osfamily => 'RedHat',
+      :operatingsystemmajrelease => '7',
+    }
+  }
   # Test configuration arrangement in a valid position
   context 'With correct order' do
 

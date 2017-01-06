@@ -62,6 +62,21 @@ class easysquid (
   $refresh_pattern        = $easysquid::params::refresh_pattern,
 ) inherits easysquid::params {
 
+  # Limit to compatible systems.
+  case $::osfamily {
+    'RedHat': {
+      if ( $::operatingsystemmajrelease !~ /(6|7)/ ) {
+        fail ('Unsuported OS Version') 
+      }
+    }
+    'Debian': {
+      if ( $::operatingsystemmajrelease != '7' ){
+        fail ('Unsuported OS Version')
+      }
+    }
+    default: { fail ('Unsuported OS') }
+  }
+
   include easysquid::install
   include easysquid::config
   include easysquid::service

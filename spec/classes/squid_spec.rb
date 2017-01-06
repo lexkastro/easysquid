@@ -4,9 +4,47 @@ require 'spec_helper'
 
 describe 'easysquid' do
 
+  # Test if RedHat release is wrong
+  context "With wrong redhat 5.x" do
+    let(:facts) {
+      {
+        :osfamily => 'RedHat',
+        :operatingsystemmajrelease => '5',
+      } 
+    }
+    it { is_expected.to raise_error(Puppet::Error) }
+  end
+
+  # Test if RedHat release is wrong
+  context "With wrong debiant 8.x" do
+    let(:facts) {
+      {
+        :osfamily => 'Debian',
+        :operatingsystemmajrelease => '8',
+      } 
+    }
+    it { is_expected.to raise_error(Puppet::Error) }
+  end
+
+  # Test if Debian release is wrong
+  context "With wrong debiant 6.x" do
+    let(:facts) {
+      {
+        :osfamily => 'Debian',
+        :operatingsystemmajrelease => '6',
+      }
+    }
+    it { is_expected.to raise_error(Puppet::Error) }
+  end
+
   # Test if init manifest load all classes
   context "With init class" do
-    let(:facts) { {:osfamily => 'RedHat'} }
+    let(:facts) {
+      {
+        :osfamily => 'RedHat',
+        :operatingsystemmajrelease => '6',
+      }
+    }
 
     it { 
       should contain_class('easysquid')
@@ -20,7 +58,13 @@ describe 'easysquid' do
 
   # Test default resources for RedHat
   context "With RedHat System'" do
-    let(:facts) { {:osfamily => 'RedHat'} }
+    let(:facts) {
+      {
+        :osfamily => 'RedHat',
+        :operatingsystemmajrelease => '7',
+      }
+    }
+
     it {
       should contain_package('squid')
       should contain_service('squid')
@@ -41,7 +85,13 @@ describe 'easysquid' do
 
   # Test default resources for Debian
   context "With Debian System" do
-    let(:facts) { {:osfamily => 'Debian'} }
+    let(:facts) {
+      {
+        :osfamily => 'Debian',
+        :operatingsystemmajrelease => '7',
+      }
+    }
+
     it {
       should contain_package('squid3')
       should contain_service('squid3')
@@ -57,6 +107,24 @@ describe 'easysquid' do
       should contain_concat__fragment('acl-block-begin')
       should contain_concat__fragment('refresh-pattern-block')
       should contain_concat__fragment('squid-main-configuration-content')
+    }
+  end
+
+  # Test custom configuration
+  context "With custom config" do
+    let(:facts) {
+      {
+        :osfamily => 'RedHat',
+        :operatingsystemmajrelease => '7',
+      }
+    }
+
+    let(:custom_config) { 'SQUID_SPEC' }
+
+    it {
+      should contain_user('squid')
+      should contain_group('squid')
+      should contain_concat('/etc/squid/squid.conf')
     }
   end
 end
