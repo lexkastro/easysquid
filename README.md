@@ -403,7 +403,7 @@ class profiles::squid_cache {
     'Debian': {
       $program =  $operatingsystemrelease ? {
         '7.5'   => '/usr/lib/squid3/digest_ldap_auth',
-        default => fail ('Unsuported OS Version')
+        default => undef,
       }
     }
 
