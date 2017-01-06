@@ -654,4 +654,4 @@ Alex De Castro (lexkastro@gmail.com)
 
 ## Support
 
-Please log tickets and issues at our [Projects site](http://https://github.com/lexkastro/easysquid/issues)
+Please log tickets and issues at our [Projects site](https://github.com/lexkastro/easysquid/issues)
